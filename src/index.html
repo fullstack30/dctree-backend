@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        let options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nome: "Produto 1",
+                preco: 19.99
+            })
+        };
+
+        fetch('http://localhost:3000/produtos', options)
+            .then(response => response.json())
+            .then(produtos => {
+                console.log(produtos);
+            });
+    </script>
+</body>
+</html>
