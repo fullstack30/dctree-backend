@@ -1,34 +1,41 @@
+const UserModel = require('../models/UserModel');
 
-let db = [];
+const list = async (request, response) => {
+    let result = await UserModel.findAll({
+        order: [
+            ["updatedAt", "ASC"]
+        ]
+    });
+    response.json(result);
+}
 
-const list = (request, response) => {
-    response.json(db);
+const getById = async (request, response) => {
+    let id = request.params.id;
+    let user = await UserModel.findOne({
+        where: { id }
+    });
+
+    return response.json(user);
 }
 
 const create = (request, response) => {
     let body = request.body;
-    db.push(body);
+    
+    UserModel.create(body);
 
     response.json({
         message: "Cadastrado com sucesso"
     });
 }
 
-const update = (request, response) => {
-    let id = request.params.id
-    let user = db[id];
+const update = async (request, response) => {
 
-    if(!user) {
-        response.status(404);
-        return response.json({
-            message: "Usuario não encontrado"
-        });
-    }
+    let id = request.params.id
+    let body = request.body;
     
-    db[id] = {
-        ...user,
-        ...request.body
-    }
+    await UserModel.update(body, {
+        where: { dc: id }
+    })
     
     response.json({
         message: "Atualizado com sucesso " + id
@@ -38,5 +45,6 @@ const update = (request, response) => {
 module.exports = {
     list,
     create,
-    update
+    update,
+    getById
 }
