@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "sync": "node src/database/sync.js",
     "server": "nodemon src/server.js"
   },
   "dependencies": {
