@@ -1,4 +1,5 @@
 const UserModel = require('../models/UserModel');
+const UserRepository = require('../reposittory/UserRepository');
 
 const list = async (request, response) => {
     let result = await UserModel.findAll({
@@ -18,14 +19,20 @@ const getById = async (request, response) => {
     return response.json(user);
 }
 
-const create = (request, response) => {
+const create = async (request, response) => {
     let body = request.body;
-    
-    UserModel.create(body);
 
-    response.json({
-        message: "Cadastrado com sucesso"
-    });
+    try {
+        await UserRepository.save(body);
+        return response.json({
+            message: "Cadastrado com sucesso"
+        });
+    } catch(error) {
+        console.log(Object.getOwnPropertyNames(error));
+        return response.json({
+            message: error.message
+        })
+    }
 }
 
 const update = async (request, response) => {
