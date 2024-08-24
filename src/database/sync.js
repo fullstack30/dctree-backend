@@ -6,4 +6,4 @@ require('../models/UserModel');
 
 // ... 30 models
 
-connection.sync({force: true});w
+connection.sync({force: true});
