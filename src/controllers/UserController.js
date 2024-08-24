@@ -1,5 +1,6 @@
 const UserModel = require('../models/UserModel');
 const UserRepository = require('../reposittory/UserRepository');
+const jwt = require('jsonwebtoken');
 
 const list = async (request, response) => {
     let result = await UserModel.findAll({
@@ -36,18 +37,6 @@ const create = async (request, response) => {
 }
 
 const update = async (request, response) => {
-
-    let id = request.params.id
-    let body = request.body;
-    let headers = request.headers;
-
-    let currentUser = await UserModel.findByPk(id);
-
-    if(currentUser.password !== headers.password) {
-        return response.json({
-            message: "Usuario não autorizado!"
-        })
-    }
     
     await UserModel.update(body, {
         where: { id }   
@@ -59,18 +48,6 @@ const update = async (request, response) => {
 }
 
 const deleteById = async (request, response) => {
-    let id = request.params.id
-    let headers = request.headers;
-
-    const currentUser = await UserModel.findByPk(id);
-
-    if(!currentUser || currentUser.password !== headers.password) {
-        response.status(401).end();
-        return response.json({
-            message: "Usuario não autorizado!"
-        })
-    }
-
     await UserModel.destroy({
         where: {id}
     })
@@ -80,10 +57,34 @@ const deleteById = async (request, response) => {
     });
 }
 
+const createToken = async (request, response) => {
+
+    let email = request.body.email;
+    let password = request.body.password;
+
+    let currentUser = await UserModel.findOne({
+        where: {
+            email,
+            password
+        }
+    });
+
+    if(!currentUser) {
+        return response.status(404).json({
+            message: "Usuario não encontrado"
+        });
+    }
+
+    let token = jwt.sign({id: currentUser.id}, process.env.SECRET, {expiresIn: '1h'});
+
+    return response.json({ token })
+}
+
 module.exports = {
     list,
     create,
     update,
     getById,
-    deleteById
+    deleteById,
+    createToken
 }
