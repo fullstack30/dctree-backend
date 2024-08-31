@@ -38,6 +38,9 @@ const create = async (request, response) => {
 
 const update = async (request, response) => {
     
+    let id = request.params.id;
+    let body = request.body;
+
     await UserModel.update(body, {
         where: { id }   
     })

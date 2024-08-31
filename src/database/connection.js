@@ -1,4 +1,5 @@
 const { Sequelize, QueryTypes } = require("sequelize");
+require('dotenv').config();
 
 let config = process.env.DB_URL;
 
