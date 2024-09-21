@@ -7,4 +7,4 @@ require('../models/UiStyleModel');
 
 // ... 30 models
 
-connection.sync();
+connection.sync({alter: true});

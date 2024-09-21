@@ -21,7 +21,7 @@ const UiStyle = connection.define("UiStyle", {
     },
     is_hover: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true,
+        defaultValue: false,
         allowNull: false
     }
 });
